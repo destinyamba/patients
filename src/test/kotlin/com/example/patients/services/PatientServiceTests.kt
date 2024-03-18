@@ -3,13 +3,13 @@ package com.example.patients.services
 import com.example.patients.repositories.PatientRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.mock
 import org.springframework.boot.test.context.SpringBootTest
 import com.example.patients.Builders.Patient.PatientBuilder
+import com.example.patients.exceptions.PatientNotFoundException
 import com.example.patients.models.Patient
 import org.bson.types.ObjectId
 import org.junit.jupiter.api.assertThrows
-import org.mockito.Mockito.doReturn
+import org.mockito.Mockito.*
 import org.mockito.kotlin.whenever
 import java.util.Optional
 

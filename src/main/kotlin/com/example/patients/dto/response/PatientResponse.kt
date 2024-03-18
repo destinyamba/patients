@@ -13,7 +13,7 @@ data class PatientResponse(
     val email: String?,
     val lastVisit: String?,
     val diagnosis: List<String>?,
-    val medication: List<String>?
+    val medication: List<String>?,
 ) {
     constructor(patient: Patient) : this(
         id = patient.id.toString(),
