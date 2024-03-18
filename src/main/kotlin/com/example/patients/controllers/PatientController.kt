@@ -32,7 +32,7 @@ class PatientController(val patientService: PatientService) {
         }
     }
 
-    @GetMapping("/{patientNum}/patientNum")
+    @GetMapping("/{patientNum}/patient")
     fun getPatientByPatientNum(@PathVariable patientNum: String): ResponseEntity<PatientResponseWithMessage> {
         return try {
             val patient = patientService.getPatientByPatientNum(patientNum)
