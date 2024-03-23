@@ -5,9 +5,11 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import com.example.patients.Builders.Patient.PatientBuilder
+import com.example.patients.dto.request.UpdatePatientRequest
 import com.example.patients.exceptions.PatientNotFoundException
 import com.example.patients.models.Patient
 import org.bson.types.ObjectId
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.*
 import org.mockito.kotlin.whenever
@@ -69,5 +71,28 @@ class PatientServiceTests {
         assertThrows<IllegalArgumentException> {
             patientService.getPatientById(invalidPatientId)
         }
+    }
+
+    @Test
+    fun `test updatePatient returns an updatedPatient`() {
+        // initialize a patient
+        val patientId = "65ed00000000000000000001"
+        val updateRequest = UpdatePatientRequest(patientId, 250, "Male", "Address", "1234567890", "john@example.com", "2024-03-18")
+        // initialize the expected result after update
+        val patient = Patient(ObjectId(patientId), 25, "P001", "John", "Male", "Address", "1234567890", "john@example.com", "2024-03-18", emptyList(), emptyList())
+
+        `when`(patientRepository.findById(ObjectId(patientId))).thenReturn(Optional.of(patient))
+        `when`(updateRequest.phone?.let { patientRepository.findByPhone(it) }).thenReturn(null)
+        `when`(patientRepository.save(patient)).thenReturn(patient)
+
+        // call the service update function
+       val result = patientService.updatePatient(patientId, updateRequest)
+
+        // check the updated values match the expected result values
+        assertEquals(result.age, updateRequest.age)
+        assertEquals(result.gender, updateRequest.gender)
+        assertEquals(result.address, updateRequest.address)
+        assertEquals(result.phone, updateRequest.phone)
+        assertEquals(result.email, updateRequest.email)
     }
 }
