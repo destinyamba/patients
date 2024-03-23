@@ -1,18 +1,22 @@
 package com.example.patients.controllers
 
+import com.example.patients.dto.request.UpdatePatientRequest
 import com.example.patients.dto.response.PatientResponse
 import com.example.patients.dto.response.PatientResponseWithMessage
 import com.example.patients.dto.response.PatientResponseWithMessageForPatient
 import com.example.patients.exceptions.PatientNotFoundException
 import com.example.patients.models.Patient
 import com.example.patients.services.PatientService
+import org.bson.types.ObjectId
 import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 
 @RestController
@@ -57,6 +61,22 @@ class PatientController(val patientService: PatientService) {
             val errorMessage = "Patient with phone number '${patient.phone}' already exists."
             ResponseEntity(PatientResponseWithMessage(null, errorMessage), HttpStatus.CONFLICT)
         }
+    }
+
+    @PutMapping("/update/{patientId}")
+    fun updatePatient(
+        @PathVariable patientId: String,
+        @RequestBody updateRequest: UpdatePatientRequest
+    ): ResponseEntity<Any> {
+        return try {
+            val updatedPatient = patientService.updatePatient(patientId, updateRequest)
+            val response = PatientResponse(updatedPatient)
+            return ResponseEntity(response, HttpStatus.OK)
+        } catch (ex: PatientNotFoundException) {
+            val errorMessage = "Patient with phone number '${updateRequest.phone}' already exists."
+            ResponseEntity(PatientResponseWithMessage(null, errorMessage), HttpStatus.CONFLICT)
+        }
+
     }
 
 }

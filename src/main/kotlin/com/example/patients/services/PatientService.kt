@@ -1,5 +1,6 @@
 package com.example.patients.services
 
+import com.example.patients.dto.request.UpdatePatientRequest
 import com.example.patients.exceptions.PatientNotFoundException
 import com.example.patients.models.Patient
 import com.example.patients.repositories.PatientRepository
@@ -67,6 +68,31 @@ class PatientService(val patientRepository: PatientRepository) {
         } while (!isUnique)
 
         return newPatientNum
+    }
+
+    /**
+     * This is to update a patient that exists in the database.
+     */
+    fun updatePatient(patientId: String, updateRequest: UpdatePatientRequest): Patient {
+        val patient = patientRepository.findById(ObjectId(patientId))
+            .orElseThrow { PatientNotFoundException("Patient with ID $patientId not found") }
+
+        // Check if the updated phone number is already in use
+        updateRequest.phone?.let { newPhoneNumber ->
+            if (patientRepository.findByPhone(newPhoneNumber) != null && patient.phone != newPhoneNumber) {
+                throw PatientNotFoundException("Phone number $newPhoneNumber is already in use")
+            }
+        }
+
+        updateRequest.name?.let { patient?.name = it }
+        updateRequest.age?.let { patient?.age = it }
+        updateRequest.gender?.let { patient?.gender = it }
+        updateRequest.address?.let { patient?.address = it }
+        updateRequest.phone?.let { patient?.phone = it }
+        updateRequest.email?.let { patient?.email = it }
+        updateRequest.lastVisit?.let { patient?.lastVisit = it }
+
+        return patientRepository.save(patient)
     }
 
 }

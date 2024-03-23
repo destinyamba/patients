@@ -8,10 +8,8 @@ import org.springframework.stereotype.Repository
 import java.util.Optional
 
 @Repository
-interface PatientRepository : MongoRepository<Patient?, ObjectId?> {
+interface PatientRepository : MongoRepository<Patient, ObjectId?> {
     fun findByPatientNum(patientNum: String?): Patient?
-    fun deleteByPatientNum(patientNum: String?): Patient?
     fun findByNameContainingIgnoreCase(name: String?): Patient?
     fun findByPhone(phone: String): Patient?
-    fun findFirstByOrderByPatientNumDesc(): Patient?
 }
