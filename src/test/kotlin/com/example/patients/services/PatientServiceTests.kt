@@ -121,4 +121,17 @@ class PatientServiceTests {
         assertEquals(result.phone, updateRequest.phone)
         assertEquals(result.email, updateRequest.email)
     }
+
+    @Test
+    fun `test deletePatient returns a string`() {
+        val patientId = "65ed00000000000000000001"
+        val patient = Patient(ObjectId(patientId), 25, "P001", "John", "Male", "Address", "1234567890", "john@example.com", "2024-03-18", emptyList(), emptyList())
+
+        `when`(patientRepository.findById(ObjectId(patientId))).thenReturn(Optional.of(patient))
+
+        val result = patientService.deletePatient(patientId)
+
+        assertEquals("Deleted successfully.", result)
+        verify(patientRepository, times(1)).delete(patient)
+    }
 }
