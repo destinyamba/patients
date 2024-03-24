@@ -74,6 +74,32 @@ class PatientServiceTests {
     }
 
     @Test
+    fun `test createPatient returns a new patient`() {
+        val patientId = "65ed00000000000000000001"
+        val patient = Patient(ObjectId(patientId), 25, "P001", "John", "Male", "Address", "1234567890", "john@example.com", "2024-03-18", emptyList(), emptyList())
+
+        `when`(patientRepository.findByPhone(patient.phone)).thenReturn(null)
+        `when`(patientRepository.save(patient)).thenReturn(patient)
+
+        val result = patientService.createPatient(patient)
+        assertEquals(patient.patientNum, result.patientNum)
+        assertEquals(patient, result)
+    }
+
+    @Test
+    fun `test createPatient throws when the patient phone is a duplicate`() {
+        val patientId = "65ed00000000000000000001"
+        val patient = Patient(ObjectId(patientId), 25, "P001", "John", "Male", "Address", "1234567890", "john@example.com", "2024-03-18", emptyList(), emptyList())
+
+        `when`(patientRepository.findByPhone(patient.phone)).thenReturn(patient)
+
+        val exception = assertThrows<PatientNotFoundException> {
+            patientService.createPatient(patient)
+        }
+        assertEquals("Patient with id Patient with phone number ${patient.phone} already exists was not found", exception.message)
+    }
+
+    @Test
     fun `test updatePatient returns an updatedPatient`() {
         // initialize a patient
         val patientId = "65ed00000000000000000001"
