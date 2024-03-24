@@ -3,14 +3,13 @@ package com.example.patients.controllers
 import com.example.patients.dto.request.UpdatePatientRequest
 import com.example.patients.dto.response.PatientResponse
 import com.example.patients.dto.response.PatientResponseWithMessage
-import com.example.patients.dto.response.PatientResponseWithMessageForPatient
 import com.example.patients.exceptions.PatientNotFoundException
+import com.example.patients.exceptions.PatientPhoneNotFoundException
 import com.example.patients.models.Patient
 import com.example.patients.services.PatientService
-import org.bson.types.ObjectId
 import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -63,7 +62,7 @@ class PatientController(val patientService: PatientService) {
         }
     }
 
-    @PutMapping("/update/{patientId}")
+    @PutMapping("/{patientId}")
     fun updatePatient(
         @PathVariable patientId: String,
         @RequestBody updateRequest: UpdatePatientRequest
@@ -72,11 +71,24 @@ class PatientController(val patientService: PatientService) {
             val updatedPatient = patientService.updatePatient(patientId, updateRequest)
             val response = PatientResponse(updatedPatient)
             return ResponseEntity(response, HttpStatus.OK)
-        } catch (ex: PatientNotFoundException) {
+        } catch (ex: PatientNotFoundException ) {
+            val errorMessage = "Patient with id '${patientId}' not found."
+            ResponseEntity(PatientResponseWithMessage(null, errorMessage), HttpStatus.NOT_FOUND)
+        }catch (ex: PatientPhoneNotFoundException) {
             val errorMessage = "Patient with phone number '${updateRequest.phone}' already exists."
             ResponseEntity(PatientResponseWithMessage(null, errorMessage), HttpStatus.CONFLICT)
         }
+    }
 
+    @DeleteMapping("/{patientId}")
+    fun deletePatient(@PathVariable patientId: String): ResponseEntity<Any> {
+        return try {
+            val deletedPatient = patientService.deletePatient(patientId)
+            return ResponseEntity("Deleted successfully", HttpStatus.OK)
+        } catch (ex: PatientNotFoundException) {
+            val errorMessage = "Patient with id '${patientId}' does not exist."
+            ResponseEntity(PatientResponseWithMessage(null, errorMessage), HttpStatus.CONFLICT)
+        }
     }
 
 }
