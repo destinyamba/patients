@@ -4,19 +4,20 @@ import com.example.patients.dto.request.UpdatePatientRequest
 import com.example.patients.exceptions.PatientNotFoundException
 import com.example.patients.exceptions.PatientPhoneNotFoundException
 import com.example.patients.models.Patient
+import com.example.patients.repositories.DiagnosisRepository
 import com.example.patients.repositories.PatientRepository
 import org.bson.types.ObjectId
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
-class PatientService(val patientRepository: PatientRepository) {
+class PatientService(val patientRepository: PatientRepository, val diagnosisRepository: DiagnosisRepository) {
 
     /**
      * This is to get a list of all the patients from the database.
      */
     fun getAllPatients(): List<Patient> {
-        return patientRepository.findAll().filterNotNull()
+       return patientRepository.findAll()
     }
 
     /**

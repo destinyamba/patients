@@ -6,6 +6,7 @@ import com.example.patients.dto.response.PatientResponseWithMessage
 import com.example.patients.exceptions.PatientNotFoundException
 import com.example.patients.exceptions.PatientPhoneNotFoundException
 import com.example.patients.models.Patient
+import com.example.patients.services.DiagnosisService
 import com.example.patients.services.PatientService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -20,12 +21,13 @@ import org.springframework.web.bind.annotation.RequestBody
 
 @RestController
 @RequestMapping("/api/v1/patients")
-class PatientController(val patientService: PatientService) {
+class PatientController(val patientService: PatientService, val diagnosisService: DiagnosisService) {
 
     @GetMapping("/all")
-    fun getAllPatients(): ResponseEntity<List<PatientResponse>> {
-        val patients = patientService.getAllPatients().map(::PatientResponse)
-        return ResponseEntity(patients, HttpStatus.OK)
+    fun allPatients(): ResponseEntity<List<PatientResponse>> {
+        val patients = patientService.getAllPatients()
+        val patientResponses = patients.map { PatientResponse(it) } // Map each Patient to a PatientResponse
+        return ResponseEntity(patientResponses, HttpStatus.OK)
     }
 
     @GetMapping("/{id}")

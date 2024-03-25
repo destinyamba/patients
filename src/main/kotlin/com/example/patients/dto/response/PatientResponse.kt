@@ -12,8 +12,6 @@ data class PatientResponse(
     val phone: String?,
     val email: String?,
     val lastVisit: String?,
-    val diagnosis: List<String>?,
-    val medication: List<String>?,
 ) {
     constructor(patient: Patient) : this(
         id = patient.id.toString(),
@@ -25,7 +23,5 @@ data class PatientResponse(
         phone = patient.phone,
         email = patient.email,
         lastVisit = patient.lastVisit,
-        diagnosis = patient.diagnosis?.map { it.toString() },
-        medication = patient.medication?.map { it.toString() }
     )
 }

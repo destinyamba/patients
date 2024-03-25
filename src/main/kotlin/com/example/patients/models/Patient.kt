@@ -3,6 +3,7 @@ package com.example.patients.models
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
+import org.springframework.data.mongodb.core.mapping.DocumentReference
 
 @Document(collection="patients")
 class Patient(
@@ -16,6 +17,7 @@ class Patient(
     var phone: String,
     var email: String,
     var lastVisit: String?,
-    val diagnosis: List<ObjectId>?,
+    @DocumentReference
+    val diagnosis: List<Diagnosis>?,
     val medication: List<ObjectId>?
 )
