@@ -7,7 +7,7 @@ data class DiagnosisResponse(
     val body: String
 ) {
     constructor(diagnosis: Diagnosis) : this(
-        id = diagnosis.id?.toHexString() ?: "",
+        id = diagnosis.id.toString(),
         body = diagnosis.body
     )
 }

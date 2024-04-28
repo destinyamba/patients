@@ -85,7 +85,7 @@ class PatientController(val patientService: PatientService, val diagnosisService
     @DeleteMapping("/{patientId}")
     fun deletePatient(@PathVariable patientId: String): ResponseEntity<Any> {
         return try {
-            val deletedPatient = patientService.deletePatient(patientId)
+            patientService.deletePatient(patientId)
             return ResponseEntity("Deleted successfully", HttpStatus.OK)
         } catch (ex: PatientNotFoundException) {
             val errorMessage = "Patient with id '${patientId}' does not exist."

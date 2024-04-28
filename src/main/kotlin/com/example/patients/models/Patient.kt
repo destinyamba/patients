@@ -18,6 +18,6 @@ class Patient(
     var email: String,
     var lastVisit: String?,
     @DocumentReference
-    val diagnosis: List<Diagnosis>?,
+    var diagnosis: List<Diagnosis>?,
     val medication: List<ObjectId>?
 )

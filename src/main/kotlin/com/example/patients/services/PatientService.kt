@@ -1,23 +1,26 @@
 package com.example.patients.services
 
+import com.example.patients.dto.request.EnvelopeRequestBody
 import com.example.patients.dto.request.UpdatePatientRequest
 import com.example.patients.exceptions.PatientNotFoundException
 import com.example.patients.exceptions.PatientPhoneNotFoundException
 import com.example.patients.models.Patient
-import com.example.patients.repositories.DiagnosisRepository
 import com.example.patients.repositories.PatientRepository
 import org.bson.types.ObjectId
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
-class PatientService(val patientRepository: PatientRepository, val diagnosisRepository: DiagnosisRepository) {
+class PatientService(val patientRepository: PatientRepository, val docuSignService: DocuSignService) {
+    private val logger: Logger = LoggerFactory.getLogger(PatientService::class.java)
 
     /**
      * This is to get a list of all the patients from the database.
      */
     fun getAllPatients(): List<Patient> {
-       return patientRepository.findAll()
+        return patientRepository.findAll()
     }
 
     /**
@@ -51,6 +54,14 @@ class PatientService(val patientRepository: PatientRepository, val diagnosisRepo
         }
         patient.patientNum = patientNum
         patient.lastVisit = LocalDateTime.now().toString()
+
+        docuSignService.createEnvelope(
+            EnvelopeRequestBody(
+                recipientEmail = patient.email,
+                recipientName = patient.name,
+            )
+        )
+        logger.info("Creating envelope for ${patient.name} to ${patient.email} ")
 
         return patientRepository.save(patient)
     }
@@ -98,7 +109,7 @@ class PatientService(val patientRepository: PatientRepository, val diagnosisRepo
      */
     fun deletePatient(patientId: String): String {
         val patient = patientRepository.findById(ObjectId(patientId))
-            .orElseThrow { PatientNotFoundException("Patient with ID $patientId not found")}
+            .orElseThrow { PatientNotFoundException("Patient with ID $patientId not found") }
 
         patientRepository.delete(patient)
 

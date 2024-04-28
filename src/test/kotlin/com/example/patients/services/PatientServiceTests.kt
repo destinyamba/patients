@@ -11,6 +11,7 @@ import com.example.patients.models.Patient
 import org.bson.types.ObjectId
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.assertThrows
+import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.kotlin.whenever
 import java.util.Optional
@@ -18,8 +19,11 @@ import java.util.Optional
 @SpringBootTest
 class PatientServiceTests {
 
+
     private val patientRepository = mock<PatientRepository>()
     private val patientService = PatientService(patientRepository)
+
+
 
     @Test
     fun `test getAllPatients when repository returns non-null patients`() {
@@ -45,7 +49,7 @@ class PatientServiceTests {
         val result = patientService.getAllPatients()
 
         // Asserting that the result contains only non-null patients
-        assertEquals(listOf(PatientBuilder(), PatientBuilder()), result)
+        assertEquals(patients, result)
     }
 
     @Test
