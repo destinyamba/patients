@@ -1,11 +1,13 @@
 package com.example.patients.services
 
-import com.example.patients.dto.request.EnvelopeRequestBody
-import org.springframework.stereotype.Service
 import com.docusign.esign.api.EnvelopesApi
 import com.docusign.esign.client.ApiClient
 import com.docusign.esign.model.*
+import com.example.patients.dto.request.EnvelopeRequestBody
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
@@ -23,6 +25,7 @@ class DocuSignService(
     @Value("\${docusign.basePath}")
     private lateinit var basePath: String
 
+    private val logger: Logger = LoggerFactory.getLogger(PatientService::class.java)
 
     fun createEnvelope(request: EnvelopeRequestBody) {
         apiClient.setBasePath("$basePath")
@@ -43,8 +46,8 @@ class DocuSignService(
                 val recipient = Signer().apply {
                     email = request.recipientEmail
                     name = request.recipientName
-                    recipientId = generateRandomUUID().toString()
-                    clientUserId = generateRandomUUID().toString()
+                    recipientId = request.recipientId
+                    clientUserId = request.recipientId
                 }
                 recipients = Recipients().apply {
                     signers = listOf(recipient)
@@ -52,11 +55,32 @@ class DocuSignService(
             }
 
             envelopesApi.createEnvelope(accountId, envelopeDefinition)
+            val envelopeSummary: EnvelopeSummary = envelopesApi.createEnvelope(accountId, envelopeDefinition)
+            val envelopeId = envelopeSummary.envelopeId
+            val recipientViewUrl = generateRecipientViewUrl(envelopeId, request)
         } catch (e: Exception) {
             e.printStackTrace()
             throw RuntimeException("Failed to create envelope: ${e.message}")
         }
     }
+
+    private fun generateRecipientViewUrl(
+        envelopeId: String,
+        request: EnvelopeRequestBody
+    ): String {
+        val recipientViewRequest = RecipientViewRequest().apply {
+            authenticationMethod = "email"
+            email = request.recipientEmail
+            clientUserId = request.recipientId
+            userName = request.recipientName
+            returnUrl = "https://www.example.com/callback"
+        }
+
+        val viewUrl = envelopesApi.createRecipientView(accountId, envelopeId, recipientViewRequest)
+        logger.info("Embedded url: ${viewUrl.url}")
+        return viewUrl.url
+    }
+
 
     private fun generateRandomUUID(): UUID {
         return UUID.randomUUID()
