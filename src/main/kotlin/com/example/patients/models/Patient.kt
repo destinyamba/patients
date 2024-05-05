@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.DocumentReference
 
-@Document(collection="patients")
+@Document(collection = "patients")
 class Patient(
     @Id
     var id: ObjectId? = null,
@@ -19,5 +19,6 @@ class Patient(
     var lastVisit: String?,
     @DocumentReference
     var diagnosis: List<Diagnosis>?,
-    val medication: List<ObjectId>?
+    @DocumentReference
+    val medication: List<Medication>?
 )

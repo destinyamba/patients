@@ -4,10 +4,13 @@ import com.docusign.esign.api.EnvelopesApi
 import com.docusign.esign.client.ApiClient
 import com.docusign.esign.model.*
 import com.example.patients.dto.request.EnvelopeRequestBody
+import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.*
 
 @Service
@@ -79,10 +82,5 @@ class DocuSignService(
         val viewUrl = envelopesApi.createRecipientView(accountId, envelopeId, recipientViewRequest)
         logger.info("Embedded url: ${viewUrl.url}")
         return viewUrl.url
-    }
-
-
-    private fun generateRandomUUID(): UUID {
-        return UUID.randomUUID()
     }
 }
