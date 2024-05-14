@@ -2,16 +2,18 @@ package com.example.patients.services
 
 import com.docusign.esign.api.EnvelopesApi
 import com.docusign.esign.client.ApiClient
-import com.docusign.esign.model.*
+import com.docusign.esign.model.Document
+import com.docusign.esign.model.EnvelopeDefinition
+import com.docusign.esign.model.EnvelopeSummary
+import com.docusign.esign.model.RecipientViewRequest
+import com.docusign.esign.model.Recipients
+import com.docusign.esign.model.Signer
 import com.example.patients.dto.request.EnvelopeRequestBody
-import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import java.net.HttpURLConnection
-import java.net.URL
-import java.util.*
 
 @Service
 class DocuSignService(
@@ -60,7 +62,7 @@ class DocuSignService(
             envelopesApi.createEnvelope(accountId, envelopeDefinition)
             val envelopeSummary: EnvelopeSummary = envelopesApi.createEnvelope(accountId, envelopeDefinition)
             val envelopeId = envelopeSummary.envelopeId
-            val recipientViewUrl = generateRecipientViewUrl(envelopeId, request)
+            generateRecipientViewUrl(envelopeId, request)
         } catch (e: Exception) {
             e.printStackTrace()
             throw RuntimeException("Failed to create envelope: ${e.message}")
