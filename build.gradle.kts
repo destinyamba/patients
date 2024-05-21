@@ -41,7 +41,7 @@ dependencies {
     implementation("org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:1.0.2")
     implementation("com.auth0:java-jwt:4.4.0")
     implementation("org.bouncycastle:bcpkix-jdk15on:1.58")
-	
+
 
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")

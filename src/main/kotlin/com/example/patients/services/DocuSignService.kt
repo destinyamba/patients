@@ -16,24 +16,19 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
 @Service
-class DocuSignService(
-    private val apiClient: ApiClient,
-    private val envelopesApi: EnvelopesApi
+class DocuSignService @Autowired constructor(
+    private val envelopesApi: EnvelopesApi,
+    private val oAuthService: OAuthService
 ) {
 
     @Value("\${docusign.accountId}")
     private lateinit var accountId: String
 
-    @Value("\${docusign.accessToken}")
-    private lateinit var accessToken: String
-
-    @Value("\${docusign.basePath}")
-    private lateinit var basePath: String
-
     private val logger: Logger = LoggerFactory.getLogger(PatientService::class.java)
 
     fun createEnvelope(request: EnvelopeRequestBody) {
-        apiClient.setBasePath("$basePath")
+        val accessToken = oAuthService.getAccessToken()
+        val apiClient = envelopesApi.apiClient
         apiClient.addDefaultHeader("Authorization", "Bearer $accessToken")
 
         try {
