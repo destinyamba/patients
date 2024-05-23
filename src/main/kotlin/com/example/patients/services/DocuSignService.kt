@@ -1,7 +1,6 @@
 package com.example.patients.services
 
 import com.docusign.esign.api.EnvelopesApi
-import com.docusign.esign.client.ApiClient
 import com.docusign.esign.model.Document
 import com.docusign.esign.model.EnvelopeDefinition
 import com.docusign.esign.model.EnvelopeSummary
@@ -46,7 +45,7 @@ class DocuSignService @Autowired constructor(
                 val recipient = Signer().apply {
                     email = request.recipientEmail
                     name = request.recipientName
-                    recipientId = request.recipientId
+                    recipientId = "1"
                     clientUserId = request.recipientId
                 }
                 recipients = Recipients().apply {
@@ -54,9 +53,10 @@ class DocuSignService @Autowired constructor(
                 }
             }
 
-            envelopesApi.createEnvelope(accountId, envelopeDefinition)
             val envelopeSummary: EnvelopeSummary = envelopesApi.createEnvelope(accountId, envelopeDefinition)
+            envelopesApi.getEnvelope(accountId, envelopeSummary.envelopeId)
             val envelopeId = envelopeSummary.envelopeId
+            logger.info("Envelope created: $envelopeSummary")
             generateRecipientViewUrl(envelopeId, request)
         } catch (e: Exception) {
             e.printStackTrace()

@@ -1,0 +1,12 @@
+docusign:
+    accountId: 1b749fa3-e688-440c-b95f-4007fc7a173f
+    basePath: https://demo.docusign.net/restapi/
+    integrationKey: 753484fe-34d5-4a18-b50e-f6bddde91bf9
+    userId: 0d29aa64-5824-4198-b53b-2b2e141ecdf2
+spring:
+    application:
+        name: patients
+    data:
+        mongodb:
+            database: patients-api-db
+            uri: mongodb+srv://destinyamba:z6qoJKM52tBj2Dvz@cluster0.i34vxnw.mongodb.net/patients-api-db
