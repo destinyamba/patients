@@ -1,0 +1,17 @@
+docusign:
+  accountId: accountId
+  basePath: basePath
+  integrationKey: integrationKey
+  userId: userId
+  rsaKey: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIEpAIBAAKCAQEAvSwwTcdQr7sjDGXXxz+kGf5UnamIw0PHowM814XRVlDT7n2/
+    dOslj0qv5TZOD7wi8ftwUbA2jOPN8JbEIRPhe+xMhRXarA7E1NPapQ==
+    -----END RSA PRIVATE KEY-----
+spring:
+  application:
+    name: patients
+  data:
+    mongodb:
+      database: patients-api-db
+      uri: mongodb+srv://uri@cluster0.i34vxnw.mongodb.net/patients-api-db
