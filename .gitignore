@@ -5,7 +5,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 /src/main/resources/application.properties
-/src/main/resources/application.yaml
+/src/main/resources/application.yml
 
 ### STS ###
 .apt_generated
@@ -42,4 +42,4 @@ out/
 .kotlin
 
 ### Helm Secrets ###
-src/main/resources/application.yaml
+src/main/resources/application.yml
