@@ -4,15 +4,15 @@ import com.docusign.esign.client.ApiClient
 import com.docusign.esign.client.auth.OAuth
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import java.nio.file.Files
-import java.nio.file.Paths
 import java.util.*
 
 @Service
 class OAuthService(
     @Value("\${docusign.integrationKey}") private val integrationKey: String,
     @Value("\${docusign.userId}") private val userId: String,
-    @Value("\${docusign.basePath}") private val basePath: String
+    @Value("\${docusign.basePath}") private val basePath: String,
+    @Value("\${docusign.rsaKey}") private val rsaKey: String
+
 ) {
 
     private var oAuthToken: OAuth.OAuthToken? = null
@@ -35,7 +35,7 @@ class OAuthService(
             val scopes = ArrayList<String>()
             scopes.add(OAuth.Scope_SIGNATURE)
             scopes.add(OAuth.Scope_IMPERSONATION)
-            val privateKeyBytes = Files.readAllBytes(Paths.get("src/main/resources/rsaKey.pem"))
+            val privateKeyBytes = rsaKey.toByteArray()
 
             oAuthToken = apiClient.requestJWTUserToken(
                 integrationKey,

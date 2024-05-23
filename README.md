@@ -19,6 +19,8 @@ brew install gpg # For generating keys
 gpg --gen-key   # Follow the prompts to generate a key
 export GPG_TTY=$(tty)   # Set the tty
 sops --decrypt secrets.yaml > ../src/main/resources/application.yml   # Decrypt the secrets file
+
+When the popup promt appears, type 'patients' and press enter.
 ```
 
 ## Encrypting secrets

@@ -56,7 +56,6 @@ class DocuSignService @Autowired constructor(
             val envelopeSummary: EnvelopeSummary = envelopesApi.createEnvelope(accountId, envelopeDefinition)
             envelopesApi.getEnvelope(accountId, envelopeSummary.envelopeId)
             val envelopeId = envelopeSummary.envelopeId
-            logger.info("Envelope created: $envelopeSummary")
             generateRecipientViewUrl(envelopeId, request)
         } catch (e: Exception) {
             e.printStackTrace()
