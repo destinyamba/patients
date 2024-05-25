@@ -16,7 +16,7 @@ brew install helm
 brew install sops
 helm plugin install https://github.com/jkroepke/helm-secrets  
 brew install gpg # For generating keys
-gpg --gen-key   # Follow the prompts to generate a key
+gpg --import private-key.gpg # import the key used to encrypt the secrets
 export GPG_TTY=$(tty)   # Set the tty
 sops --decrypt secrets.yaml > ../src/main/resources/application.yml   # Decrypt the secrets file
 
