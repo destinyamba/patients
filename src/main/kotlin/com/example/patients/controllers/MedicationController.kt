@@ -28,10 +28,10 @@ class MedicationController(val medicationService: MedicationService) {
     @PostMapping("/create/{patientId}")
     fun createMedication(
         @PathVariable patientId: String,
-        @RequestBody medicationBody: Medication
-    ): ResponseEntity<DiagnosisResponse> {
-        val medication = medicationService.createMedication(patientId, medicationBody.toString())
-        val diagnosisResponse = DiagnosisResponse(medicationBody.id.toString(), medicationBody.body)
-        return ResponseEntity(diagnosisResponse, HttpStatus.CREATED)
+        @RequestBody medication: Medication
+    ): ResponseEntity<MedicationResponse> {
+        val medication = medicationService.addMedicationToPatient(patientId, medication)
+        val medicationResponse = medication?.let { MedicationResponse(it) }
+        return ResponseEntity(medicationResponse, HttpStatus.CREATED)
     }
 }

@@ -20,5 +20,5 @@ class Patient(
     @DocumentReference
     var diagnosis: List<Diagnosis>?,
     @DocumentReference
-    val medication: List<Medication>?
+    var medication: List<Medication>?
 )

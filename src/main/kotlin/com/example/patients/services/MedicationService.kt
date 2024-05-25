@@ -1,6 +1,7 @@
 package com.example.patients.services
 
 import com.example.patients.exceptions.PatientNotFoundException
+import com.example.patients.models.Diagnosis
 import com.example.patients.models.Medication
 import com.example.patients.models.Patient
 import com.example.patients.repositories.MedicationRepository
@@ -27,14 +28,16 @@ class MedicationService(
         return patient.medication ?: emptyList()
     }
 
-    fun createMedication(medicationBody: String, patientId: String): Medication {
-        val medication = medicationRepository.insert(Medication(body = medicationBody))
+    fun addMedicationToPatient(patientId: String, body: Medication): Medication? {
+        val patientOptional = patientRepository.findById(ObjectId(patientId))
 
-        mongoTemplate.update(Patient::class.java)
-            .matching(Criteria.where("_id").`is`(patientId))
-            .apply(Update().push("medication", medication))
-            .first()
-
-        return medication
+        if (patientOptional.isPresent) {
+            val savedMedication = medicationRepository.save(body)
+            val patient = patientOptional.get()
+            patient.medication = (patient.medication ?: listOf()) + savedMedication
+            patientRepository.save(patient)
+            return savedMedication
+        }
+        return null
     }
 }

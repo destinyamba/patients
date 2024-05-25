@@ -14,17 +14,17 @@ class DiagnosisController(val diagnosisService: DiagnosisService) {
     @GetMapping("/{patientId}")
     fun getAllDiagnosesForPatient(@PathVariable patientId: String): ResponseEntity<List<DiagnosisResponse>> {
         val diagnosis = diagnosisService.getAllDiagnosesForPatient(patientId)
-        val diagnosisResponse = diagnosis.map { DiagnosisResponse( it) }
+        val diagnosisResponse = diagnosis.map { DiagnosisResponse(it) }
         return ResponseEntity(diagnosisResponse, HttpStatus.OK)
     }
 
     @PostMapping("/create/{patientId}")
     fun createDiagnosis(
         @PathVariable patientId: String,
-        @RequestBody diagnosisBody: Diagnosis
+        @RequestBody diagnosis: Diagnosis
     ): ResponseEntity<DiagnosisResponse> {
-        val diagnosis = diagnosisService.createDiagnosis(patientId, diagnosisBody.toString())
-        val diagnosisResponse = DiagnosisResponse(diagnosisBody.id.toString(), diagnosisBody.body)
+        val diagnosis = diagnosisService.addDiagnosisToPatient(patientId, diagnosis)
+        val diagnosisResponse = diagnosis?.let { DiagnosisResponse(it) }
         return ResponseEntity(diagnosisResponse, HttpStatus.CREATED)
     }
 }
