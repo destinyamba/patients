@@ -1,7 +1,6 @@
 package com.example.patients.services
 
 import com.example.patients.exceptions.PatientNotFoundException
-import com.example.patients.models.Diagnosis
 import com.example.patients.models.Medication
 import com.example.patients.models.Patient
 import com.example.patients.repositories.MedicationRepository

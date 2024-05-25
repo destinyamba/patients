@@ -27,24 +27,6 @@ class DiagnosisService(
         return patient.diagnosis ?: emptyList()
     }
 
-//    fun createDiagnosisForPatient(patientId: String, diagnosisBody: String): Diagnosis {
-//        // Validate patient ID existence
-//        val patient = patientRepository.findById(ObjectId(patientId))
-//            .orElseThrow { PatientNotFoundException("Patient with ID $patientId not found") }
-//
-//        // Create a new Diagnosis object
-//        val diagnosis = Diagnosis(body = diagnosisBody)
-//
-//        // Associate the diagnosis with the patient
-//        patient.diagnosis = (patient.diagnosis?.toMutableList() ?: mutableListOf()).apply { add(diagnosis) }
-//
-//        // Save the updated patient to ensure the diagnosis association is persisted
-//        patientRepository.save(patient)
-//
-//        // Save the diagnosis to the database
-//        return diagnosisRepository.save(diagnosis)
-//    }
-
 
     fun createDiagnosis(diagnosisBody: String, patientId: String): Diagnosis {
         val diagnosis = diagnosisRepository.insert(Diagnosis(body = diagnosisBody))
