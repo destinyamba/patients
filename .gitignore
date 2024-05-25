@@ -43,3 +43,10 @@ out/
 
 ### Helm Secrets ###
 src/main/resources/application.yml
+.tmp/
+caches/
+daemon/
+jdks/
+kotlin-profile/
+native/
+wrapper/
