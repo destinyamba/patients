@@ -59,6 +59,7 @@ class PatientService(val patientRepository: PatientRepository, val docuSignServi
             EnvelopeRequestBody(
                 recipientEmail = patient.email,
                 recipientName = patient.name,
+                isEmbeddedSigning = false
             )
         )
         logger.info("Creating envelope for ${patient.name} to ${patient.email} ")

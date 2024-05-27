@@ -25,12 +25,12 @@ class DocuSignService @Autowired constructor(
 
     private val logger: Logger = LoggerFactory.getLogger(PatientService::class.java)
 
-    fun createEnvelope(request: EnvelopeRequestBody) {
+    fun createEnvelope(request: EnvelopeRequestBody): String? {
         val accessToken = oAuthService.getAccessToken()
         val apiClient = envelopesApi.apiClient
         apiClient.addDefaultHeader("Authorization", "Bearer $accessToken")
 
-        try {
+        return try {
             val envelopeDefinition = EnvelopeDefinition().apply {
                 emailSubject = "Patient Contract - Please Sign Document"
                 status = "sent"
@@ -46,7 +46,9 @@ class DocuSignService @Autowired constructor(
                     email = request.recipientEmail
                     name = request.recipientName
                     recipientId = "1"
-                    clientUserId = request.recipientId
+                    if (request.isEmbeddedSigning) {
+                        clientUserId = request.recipientId
+                    }
                 }
                 recipients = Recipients().apply {
                     signers = listOf(recipient)
@@ -54,9 +56,13 @@ class DocuSignService @Autowired constructor(
             }
 
             val envelopeSummary: EnvelopeSummary = envelopesApi.createEnvelope(accountId, envelopeDefinition)
-            envelopesApi.getEnvelope(accountId, envelopeSummary.envelopeId)
             val envelopeId = envelopeSummary.envelopeId
-            generateRecipientViewUrl(envelopeId, request)
+
+            if (request.isEmbeddedSigning) {
+                return generateRecipientViewUrl(envelopeId, request)
+            } else {
+                return envelopeId
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             throw RuntimeException("Failed to create envelope: ${e.message}")
