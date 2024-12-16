@@ -25,3 +25,11 @@ data class PatientResponse(
         lastVisit = patient.lastVisit,
     )
 }
+
+data class PagedResponse<T>(
+    val patients: List<T>,
+    val page: Int,
+    val pageSize: Int,
+    val totalItems: Int,
+    val totalPages: Int
+)

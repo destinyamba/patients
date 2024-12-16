@@ -1,6 +1,7 @@
 package com.example.patients.controllers
 
 import com.example.patients.dto.request.UpdatePatientRequest
+import com.example.patients.dto.response.PagedResponse
 import com.example.patients.dto.response.PatientResponse
 import com.example.patients.dto.response.PatientResponseWithMessage
 import com.example.patients.exceptions.PatientNotFoundException
@@ -10,24 +11,19 @@ import com.example.patients.services.DiagnosisService
 import com.example.patients.services.PatientService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/patients")
 class PatientController(val patientService: PatientService, val diagnosisService: DiagnosisService) {
 
     @GetMapping("/all")
-    fun allPatients(): ResponseEntity<List<PatientResponse>> {
-        val patients = patientService.getAllPatients()
-        val patientResponses = patients.map { PatientResponse(it) } // Map each Patient to a PatientResponse
-        return ResponseEntity(patientResponses, HttpStatus.OK)
+    fun allPatients(
+        @RequestParam(required = false, defaultValue = "1") pageNum: Int,
+        @RequestParam(required = false, defaultValue = "12") pageSize: Int
+    ): ResponseEntity<PagedResponse<PatientResponse>> {
+        val response = patientService.getAllPatients(pageNum, pageSize)
+        return ResponseEntity.ok(response)
     }
 
     @GetMapping("/{id}")

@@ -2,6 +2,8 @@ package com.example.patients.services
 
 import com.example.patients.dto.request.EnvelopeRequestBody
 import com.example.patients.dto.request.UpdatePatientRequest
+import com.example.patients.dto.response.PagedResponse
+import com.example.patients.dto.response.PatientResponse
 import com.example.patients.exceptions.PatientNotFoundException
 import com.example.patients.exceptions.PatientPhoneNotFoundException
 import com.example.patients.models.Patient
@@ -19,9 +21,30 @@ class PatientService(val patientRepository: PatientRepository, val docuSignServi
     /**
      * This is to get a list of all the patients from the database.
      */
-    fun getAllPatients(): List<Patient> {
-        return patientRepository.findAll()
+    fun getAllPatients(pageNum: Int, pageSize: Int): PagedResponse<PatientResponse> {
+        val allPatients = patientRepository.findAll()
+        val totalPatients = allPatients.size
+        val totalPages = (totalPatients + pageSize - 1) / pageSize
+
+        val startIndex = (pageNum - 1) * pageSize
+        val endIndex = (startIndex + pageSize).coerceAtMost(totalPatients)
+        val paginatedPatients = if (startIndex < totalPatients) {
+            allPatients.subList(startIndex, endIndex)
+        } else {
+            emptyList()
+        }
+
+        val patientResponses = paginatedPatients.map { PatientResponse(it) }
+
+        return PagedResponse(
+            patients = patientResponses,
+            page = pageNum,
+            pageSize = pageSize,
+            totalItems = totalPatients,
+            totalPages = totalPages
+        )
     }
+
 
     /**
      * This is to get a patient by id from the database.
@@ -69,7 +92,7 @@ class PatientService(val patientRepository: PatientRepository, val docuSignServi
 
     private fun generatePatientNum(): String {
         var newPatientNum: String
-        var isUnique = false
+        var isUnique: Boolean
 
         do {
             val randomDigits = (100..999).random() // Generate random 3-digit number
