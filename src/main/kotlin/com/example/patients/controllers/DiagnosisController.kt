@@ -23,8 +23,8 @@ class DiagnosisController(val diagnosisService: DiagnosisService) {
         @PathVariable patientId: String,
         @RequestBody diagnosis: Diagnosis
     ): ResponseEntity<DiagnosisResponse> {
-        val diagnosis = diagnosisService.addDiagnosisToPatient(patientId, diagnosis)
-        val diagnosisResponse = diagnosis?.let { DiagnosisResponse(it) }
+        val diagnosisValue = diagnosisService.addDiagnosisToPatient(patientId, diagnosis)
+        val diagnosisResponse = diagnosisValue?.let { DiagnosisResponse(it) }
         return ResponseEntity(diagnosisResponse, HttpStatus.CREATED)
     }
 }
