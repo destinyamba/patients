@@ -1,5 +1,5 @@
-# Use a base image with Java 11 runtime
-FROM openjdk:11-jre-slim
+# Use a base image with Java 17 runtime
+FROM openjdk:17-jre-slim
 
 # Add application JAR to the image
 ARG JAR_FILE=build/libs/spring-patients-app.jar

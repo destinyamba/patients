@@ -6,7 +6,6 @@ on:
       [ main ]
     paths:
       - '**'
-      - '.github/workflows/spring-patients-app-AutoDeployTrigger-28f621c4-7489-4c8c-b6dc-130177d1f994.yml'
 
   workflow_dispatch:
 
@@ -28,11 +27,10 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
-          submodules: 'recursive'
 
       # Build the project using Gradle
       - name: Build JAR file
-        run: ./gradlew clean build -x test
+        run: ./gradlew clean build
 
       # Azure Login
       - name: Azure Login
@@ -54,5 +52,3 @@ jobs:
           containerAppName: spring-patients-app
           resourceGroup: patients-app
           imageToBuild: myregistry.azurecr.io/spring-patients-app:${{ github.sha }}
-          buildArguments: |
-            BP_JAVA_VERSION=17
