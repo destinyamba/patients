@@ -28,6 +28,7 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
+          submodules: 'recursive'
 
       # Build the project using Gradle
       - name: Build JAR file
