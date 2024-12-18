@@ -30,8 +30,8 @@ class MedicationController(val medicationService: MedicationService) {
         @PathVariable patientId: String,
         @RequestBody medication: Medication
     ): ResponseEntity<MedicationResponse> {
-        val medication = medicationService.addMedicationToPatient(patientId, medication)
-        val medicationResponse = medication?.let { MedicationResponse(it) }
+        val medicationValue = medicationService.addMedicationToPatient(patientId, medication)
+        val medicationResponse = medicationValue?.let { MedicationResponse(it) }
         return ResponseEntity(medicationResponse, HttpStatus.CREATED)
     }
 }
