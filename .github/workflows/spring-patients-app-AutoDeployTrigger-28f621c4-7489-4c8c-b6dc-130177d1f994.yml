@@ -2,28 +2,30 @@ name: Trigger auto deployment for spring-patients-app
 
 # When this action will be executed
 on:
-  # Automatically trigger it when detected changes in repo
+  # Automatically trigger it when changes are detected in the repository
   push:
     branches: 
       [ main ]
     paths:
-    - '**'
-    - '.github/workflows/spring-patients-app-AutoDeployTrigger-28f621c4-7489-4c8c-b6dc-130177d1f994.yml'
+      - '**'
+      - '.github/workflows/spring-patients-app-AutoDeployTrigger-28f621c4-7489-4c8c-b6dc-130177d1f994.yml'
 
-  # Allow manual trigger 
+  # Allow manual trigger
   workflow_dispatch:      
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions: 
-      id-token: write #This is required for requesting the OIDC JWT Token
-      contents: read #Required when GH token is used to authenticate with private repo
+      id-token: write # Required for requesting the OIDC JWT Token
+      contents: read # Required when GH token is used to authenticate with a private repo
 
     steps:
+      # Checkout the branch
       - name: Checkout to the branch
         uses: actions/checkout@v2
 
+      # Azure Login
       - name: Azure Login
         uses: azure/login@v1
         with:
@@ -31,18 +33,17 @@ jobs:
           tenant-id: ${{ secrets.SPRINGPATIENTSAPP_AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.SPRINGPATIENTSAPP_AZURE_SUBSCRIPTION_ID }}
 
+      # Build and push container image to registry
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
           appSourcePath: ${{ github.workspace }}
-          _dockerfilePathKey_: _dockerfilePath_
-          registryUrl: 
+          dockerfilePath: ./Dockerfile # Specify the correct Dockerfile path
+          registryUrl: myregistry.azurecr.io # Replace with your registry URL
           registryUsername: ${{ secrets.SPRINGPATIENTSAPP_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.SPRINGPATIENTSAPP_REGISTRY_PASSWORD }}
           containerAppName: spring-patients-app
           resourceGroup: patients-app
-          imageToBuild: default/[parameters('containerAppName')]:${{ github.sha }}
-          _buildArgumentsKey_: |
-            _buildArgumentsValues_
-
-
+          imageToBuild: myregistry.azurecr.io/spring-patients-app:${{ github.sha }}
+          buildArguments: |
+            BP_JAVA_VERSION=11
