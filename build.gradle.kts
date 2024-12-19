@@ -7,6 +7,10 @@ plugins {
     kotlin("plugin.spring") version "1.9.22"
 }
 
+tasks.bootJar {
+    archiveFileName.set("app.jar")
+}
+
 group = "com.example"
 version = "0.0.1-SNAPSHOT"
 

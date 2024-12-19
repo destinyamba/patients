@@ -9,13 +9,37 @@ services:
       - mongodb
     environment:
       # DocuSign Configuration
-      DOCUSIGN_ACCOUNT_ID: 12345678-90ab-cdef-1234-567890abcdef
-      DOCUSIGN_BASE_PATH: https://demo.docusign.net/restapi/
-      DOCUSIGN_INTEGRATION_KEY: 98765432-10fe-dcba-4321-0fedcba98765
-      DOCUSIGN_USER_ID: abc12345-6789-def0-1234-56789abcdef0
-      DOCUSIGN_RSA_KEY: |
+      docusign.integrationKey: 98765432-10fe-dcba-4321-0fedcba98765
+      docusign.accountId: 12345678-90ab-cdef-1234-567890abcdef
+      docusign.basePath: https://demo.docusign.net/restapi/
+      docusign.userId: abc12345-6789-def0-1234-56789abcdef0
+      docusign.rsaKey: |
         -----BEGIN RSA PRIVATE KEY-----
-        Your-RSA-Private-Key-Goes-Here
+        MIIEpAIBAAKCAQEAvSwwTcdQr7sjDGXXxz+kGf5UnamIw0PHowM814XRVlDT7n2/
+        b9WraM3GUA5nrSUZeCbD6GALhzj8uFNfX8rGpkovqtozW0mwpeMSJxbZzfM/llbO
+        QcXAdeUlpFr/oUv+yzBXpXi+DpaJrYbhqDgmByslwdP4mL7KsJasyFPI0pwVw5qY
+        Um9oti5C/dcHKUUasDjJ+PR4XNCvDHSwkPlFeAqL3WeP7lDn2SjLoJSS1fAV/L8T
+        ISBO2oEqookZjsGK1C0bHU1r3nkQj3qy5FyJ7cyj8HqTq+v7J2qFNiknins5jlOD
+        iuI7UMG0gSX1lUpSi5uitu7ZKLyQau7FvB1C7wIDAQABAoIBAA/ntLdSuuvOMfqw
+        tLfkbRbgZYXiA1qDiuKfpZBrXbfs+3ym/EmvWduUct2NRdXuyMRA4iIvXRjFR6j0
+        cuWPcNdPZSWaIKJGwQBEO2T891q+XnTJ9J/evA6i3GDZY8/QdL+UX3IirjwfbRD2
+        xmdJ3UH8tI57lNW8M4zYW6D2O8F1R9K8+i0mbIMe1L/pbF/0bra3wAuvWWvcosoq
+        k04McTJeAL8HhH7aRKFhRqRkbJkxNNW2f567naRfy1x0rmOdu5UWAAvWjtwPA3aw
+        kQXhy44u/WyOGW5v27itxR/v0m4W1LVy+oYd8PW+h3yo5aMOdxsxmqVMZ+98TsxC
+        jiGjjGUCgYEA+fvNgH4P18mCDR4dqtaBBZG0MY0pBfAteA6SUGRuZb8yn5jC5vhe
+        25y2Zrq6AgqUg6T+GD7X0t6FIEWgL1rALNbXp8kgBMpKOesFxIn5wbf0AQ/CIVe6
+        z5aWJyIrueS5gewnPJyGUaMAmKYDsW+kn2cEg25DHCFq15WIdFBxtc0CgYEAwbm3
+        ucQpeM1bxY/mAq1u2jGZWcAH4szeQAmNSUttNqwYtJ2lwiXZOz8PiO1clUmsxCiw
+        tiDkVrllOsEi+yWmwwJFKQgwGIqPY13kGVSgJnxM0aMlHb1i5dYAIkB0SSxQkwyO
+        gmUYiPzcKShqwKkvYArnZXU1K6Fx/4y2d0K5H6sCgYEArvB3HK+bmLAs8c8chdx9
+        CA+yIWceyUgOGdFgtR/DXjLSU3vNEWPIxjlCMFwGJb2Ptxy0sPTxhmEwmqf+9IS2
+        repfmsyWOqPyE9wT+jlwbg+0kzWa7kh9tB420AYKwZl99Jz1zGXhXaoLlcfAF+EA
+        PIkUUIHONxZvtZSwnG1bVhUCgYAvUPQd7FqQxd+/Xkk4qDGmG20wLaX/cDhsfajD
+        mSegreIO415kECiBvwJFWGw/jlIjSyj2IwyCXh/qfNfVbbnQcZKA1h4hMF6bT4hx
+        42iGXd/JaEadf+9S4bUAqKt+X9OCRxPbp2OZueDwMI36ZphKpf8kmb8V3AXi+/Rp
+        JqPepwKBgQCB38iiVeiA07ckx9a77XfSsR6JUJYzXsGMFr9IUJ+OA7ptKqwcKm2d
+        QcZB0laSbc/uc0W7VcP27bHOWLZahkoUIKfr2yiA1KK+3F4KtpVBdAKDhEPJPiJV
+        dOslj0qv5TZOD7wi8ftwUbA2jOPN8JbEIRPhe+xMhRXarA7E1NPapQ==
         -----END RSA PRIVATE KEY-----
 
       # Spring Application Configuration
