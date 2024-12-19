@@ -54,3 +54,4 @@ wrapper/
 
 # Temporary Fix
 docker-compose.yml
+/docker-compose.yml
