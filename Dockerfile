@@ -4,15 +4,23 @@ FROM eclipse-temurin:17-jdk
 # Set the working directory
 WORKDIR /app
 
-# Copy the entire project
-COPY . .
+# Copy gradle files first for better caching
+COPY gradle gradle
+COPY gradlew .
+COPY settings.gradle .
+COPY build.gradle .
+
+# Make gradlew executable
+RUN chmod +x gradlew
+
+# Copy the rest of the application
+COPY src src
 
 # Build the JAR
-RUN chmod +x ./gradlew
-RUN ./gradlew clean bootJar
+RUN ./gradlew bootJar --no-daemon
 
 # Expose the application port
 EXPOSE 8080
 
 # Define the command to run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "build/libs/*.jar"]
