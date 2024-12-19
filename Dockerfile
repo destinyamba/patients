@@ -1,10 +1,19 @@
-FROM openjdk:17
+# Start with a base image
+FROM eclipse-temurin:17-jdk
 
-WORKDIR /patients
+# Set the working directory
+WORKDIR /app
 
-CMD ["./gradlew", "clean", "bootJar"]
+COPY . .
 
-COPY build/libs/*.jar app.jar
+# Build the JAR
+RUN ./gradlew clean bootJar
 
-#EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Copy the build output JAR file to the container
+COPY build/libs/app.jar app.jar
+
+# Expose the application port
+EXPOSE 8080
+
+# Define the command to run the application
+ENTRYPOINT ["java", "-jar", "build/libs/*.jar"]
