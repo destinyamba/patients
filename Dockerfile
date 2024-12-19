@@ -1,14 +1,10 @@
-# Start with a base image
-FROM eclipse-temurin:17-jdk
+FROM openjdk:17
 
-# Set the working directory
-WORKDIR /app
+WORKDIR /patients
 
-# Copy the build output JAR file to the container
-COPY build/libs/app.jar app.jar
+CMD ["./gradlew", "clean", "bootJar"]
 
-# Expose the application port
-EXPOSE 8080
+COPY build/libs/*.jar app.jar
 
-# Define the command to run the application
+#EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
