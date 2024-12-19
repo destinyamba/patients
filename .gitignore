@@ -51,3 +51,6 @@ jdks/
 kotlin-profile/
 native/
 wrapper/
+
+# Temporary Fix
+docker-compose.yml

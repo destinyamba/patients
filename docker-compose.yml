@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+    environment:
+      # DocuSign Configuration
+      DOCUSIGN_ACCOUNT_ID: 12345678-90ab-cdef-1234-567890abcdef
+      DOCUSIGN_BASE_PATH: https://demo.docusign.net/restapi/
+      DOCUSIGN_INTEGRATION_KEY: 98765432-10fe-dcba-4321-0fedcba98765
+      DOCUSIGN_USER_ID: abc12345-6789-def0-1234-56789abcdef0
+      DOCUSIGN_RSA_KEY: |
+        -----BEGIN RSA PRIVATE KEY-----
+        Your-RSA-Private-Key-Goes-Here
+        -----END RSA PRIVATE KEY-----
+
+      # Spring Application Configuration
+      SPRING_APPLICATION_NAME: patients
+      SPRING_DATA_MONGODB_DATABASE: patients-api-db
+      SPRING_DATA_MONGODB_URI: mongodb+srv://destinyamba:z6qoJKM52tBj2Dvz@cluster0.i34vxnw.mongodb.net/patients-api-db
+  mongodb:
+    image: mongo:6 # MongoDB version
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: patients-api-db
+    ports:
+      - "27017:27017"
